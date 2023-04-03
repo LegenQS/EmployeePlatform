@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HouseService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HousingService</a> &gt; <a href="index.source.html" class="el_package">com.example.housingservice.service</a> &gt; <span class="el_source">HouseService.java</span></div><h1>HouseService.java</h1><pre class="source lang-java linenums">package com.example.housingservice.service;
+
+import com.example.housingservice.dao.HouseDAO;
+import com.example.housingservice.domain.Facility;
+import com.example.housingservice.domain.House;
+import com.example.housingservice.domain.HouseFacility;
+import com.example.housingservice.domain.Landlord;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.Tuple;
+import javax.transaction.Transactional;
+import java.util.List;
+
+
+@Service
+public class HouseService {
+    private HouseDAO houseDAO;
+    @Autowired
+<span class="fc" id="L20">    public HouseService(HouseDAO houseDAO) {</span>
+<span class="fc" id="L21">        this.houseDAO = houseDAO;</span>
+<span class="fc" id="L22">    }</span>
+
+    @Transactional
+<span class="nc" id="L25">    public List&lt;House&gt; getAddress() {return houseDAO.getAddress();}</span>
+
+    @Transactional
+<span class="nc" id="L28">    public List&lt;Landlord&gt; getName() {return houseDAO.getName();}</span>
+
+    @Transactional
+<span class="nc" id="L31">    public List&lt;House&gt; getAllHouses() {return houseDAO.getAllHouses();}</span>
+
+    @Transactional
+<span class="nc" id="L34">    public void addHouse(House house) {houseDAO.addHouse(house);}</span>
+
+    @Transactional
+<span class="nc" id="L37">    public void deleteHouse(Integer id) {houseDAO.deleteHouse(id);}</span>
+
+    @Transactional
+<span class="nc" id="L40">    public HouseFacility getHouseDetailById(Integer id) {return houseDAO.getHouseDetailById(id);}</span>
+
+    @Transactional
+<span class="nc" id="L43">    public Integer getNonFullHouseId() {return houseDAO.getNonFullHouseId();}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

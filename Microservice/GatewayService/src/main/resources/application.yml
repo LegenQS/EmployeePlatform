@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: gateway-service
+
+server:
+  port: 9012
+
+#The Gateway will also be registered at the Eureka server
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+security:
+  jwt:
+    token:
+      key: ENC(LW2nGQYI2HLpEfTfMWmP5wGOp1/BuNxk)

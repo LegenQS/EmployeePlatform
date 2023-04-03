@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: housing-service
+  mvc:
+    servlet:
+      path: /housing-service
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+
+server:
+  port: 8082
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+database:
+  hibernate:
+    url: jdbc:mysql://localhost:3306/housing
+    driver: com.mysql.cj.jdbc.Driver
+    username: root
+    password: ENC(1ba+Hk/BS0QnEnu/DID0QZMOzVZbDSdL)
+    dialect: org.hibernate.dialect.MySQLDialect
+    showsql: true
+
+security:
+  jwt:
+    token:
+      key: ENC(LW2nGQYI2HLpEfTfMWmP5wGOp1/BuNxk)
+

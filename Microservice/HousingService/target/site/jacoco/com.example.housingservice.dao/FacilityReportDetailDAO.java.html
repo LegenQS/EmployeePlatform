@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FacilityReportDetailDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HousingService</a> &gt; <a href="index.source.html" class="el_package">com.example.housingservice.dao</a> &gt; <span class="el_source">FacilityReportDetailDAO.java</span></div><h1>FacilityReportDetailDAO.java</h1><pre class="source lang-java linenums">package com.example.housingservice.dao;
+
+import com.example.housingservice.domain.FacilityReport;
+import com.example.housingservice.domain.FacilityReportDetail;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
+
+@Repository
+<span class="fc" id="L19">public class FacilityReportDetailDAO {</span>
+    @Autowired
+    SessionFactory sessionFactory;
+
+    public void updateCommentsById(String id, String comment) {
+<span class="nc" id="L24">        Session session = sessionFactory.getCurrentSession();</span>
+<span class="nc" id="L25">        Transaction transaction = null;</span>
+<span class="nc" id="L26">        Integer result = null;</span>
+
+        try {
+<span class="nc" id="L29">            Query query = session.createQuery(&quot;update FacilityReportDetail f set f.comment = :comment, f.lastModDate = now() &quot; +</span>
+                    &quot;where f.id = :id&quot;);
+<span class="nc" id="L31">            query.setParameter(&quot;id&quot;, id);</span>
+//            query.setParameter(&quot;empId&quot;, empId);
+<span class="nc" id="L33">            query.setParameter(&quot;comment&quot;, comment);</span>
+
+<span class="nc" id="L35">            result = query.executeUpdate();</span>
+
+<span class="nc" id="L37">            System.out.println(&quot;Rows affected: &quot; + result);</span>
+<span class="nc" id="L38">            System.out.println(&quot;comment: &quot; + comment);</span>
+
+<span class="nc" id="L40">        } catch (HibernateException e) {</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">            if (transaction != null) {</span>
+<span class="nc" id="L42">                transaction.rollback();</span>
+            }
+<span class="nc" id="L44">            e.printStackTrace();</span>
+<span class="nc" id="L45">        }</span>
+<span class="nc" id="L46">    }</span>
+
+    public void addComment(FacilityReportDetail facilityReportDetail) {
+<span class="nc" id="L49">        Session session = sessionFactory.getCurrentSession();</span>
+        try{
+<span class="nc" id="L51">            session.saveOrUpdate(facilityReportDetail);</span>
+<span class="nc" id="L52">        }catch (Exception e){</span>
+<span class="nc" id="L53">            e.printStackTrace();</span>
+<span class="nc" id="L54">        }</span>
+<span class="nc" id="L55">    }</span>
+
+    public List&lt;FacilityReportDetail&gt; getReportDetailById(Integer id) {
+<span class="nc" id="L58">        Session session = sessionFactory.getCurrentSession();</span>
+<span class="nc" id="L59">        List&lt;FacilityReportDetail&gt; details = null;</span>
+
+<span class="nc" id="L61">        Query query = session.createQuery(&quot;from FacilityReportDetail f where f.id = :id&quot;);</span>
+<span class="nc" id="L62">        query.setParameter(&quot;id&quot;, id);</span>
+<span class="nc" id="L63">        details = query.getResultList();</span>
+
+<span class="nc" id="L65">        return details;</span>
+    }
+
+    public List&lt;FacilityReportDetail&gt; getFacilityReportDetailsByReportId(int report_id){
+        try{
+<span class="nc" id="L70">            Session session = sessionFactory.getCurrentSession();</span>
+<span class="nc" id="L71">            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();</span>
+<span class="nc" id="L72">            CriteriaQuery&lt;FacilityReportDetail&gt; criteriaQuery = criteriaBuilder.createQuery(FacilityReportDetail.class);</span>
+<span class="nc" id="L73">            Root&lt;FacilityReportDetail&gt; root = criteriaQuery.from(FacilityReportDetail.class);</span>
+<span class="nc" id="L74">            criteriaQuery.select(root).where(criteriaBuilder.equal(root.get(&quot;facilityReportId&quot;),report_id));</span>
+<span class="nc" id="L75">            return session.createQuery(criteriaQuery).getResultList();</span>
+        }
+<span class="nc" id="L77">        catch (HibernateException e){</span>
+<span class="nc" id="L78">            return null;</span>
+        }
+    }
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

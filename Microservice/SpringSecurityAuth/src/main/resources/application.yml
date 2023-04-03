@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: auth-service
+  mvc:
+    servlet:
+      path: /auth-service
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+security:
+  jwt:
+    token:
+      key: ENC(LW2nGQYI2HLpEfTfMWmP5wGOp1/BuNxk)
+
+database:
+  hibernate:
+    url: jdbc:mysql://database-2.cickoqfkvdpa.us-east-2.rds.amazonaws.com:3306/authentication?userSSL=false
+    driver: com.mysql.cj.jdbc.Driver
+    username: admin
+    password: ENC(OKgOcywqxPZz9OshDI30HhHz5OX+EsF+)
+    dialect: org.hibernate.dialect.MySQLDialect
+    showsql: true
+
+server:
+  port: 8089
+
+auth:
+  hr_registry:
+    token: ENC(qYrh5ZiwLvTp/9PVI/SM3qvwRpUawCYg)
+
+
+
+

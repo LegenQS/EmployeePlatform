@@ -1,0 +1,5 @@
+com\example\housingservice\dao\FacilityReportDetailDAOTest.class
+com\example\housingservice\controller\HRControllerTest.class
+com\example\housingservice\HousingServiceApplicationTests.class
+com\example\housingservice\controller\EmployeeControllerTest.class
+com\example\housingservice\dao\HouseDAOTest.class

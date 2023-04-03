@@ -1,0 +1,17 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+HousingService,com.example.housingservice.security,AuthUserDetail.AuthUserDetailBuilder,110,0,0,0,1,0,11,0,11,0
+HousingService,com.example.housingservice.security,JwtProvider,54,3,0,0,13,1,2,1,2,1
+HousingService,com.example.housingservice.security,JwtFilter,30,7,2,0,10,3,2,2,1,2
+HousingService,com.example.housingservice.security,AuthUserDetail,55,0,0,0,9,0,10,0,10,0
+HousingService,com.example.housingservice.service,FacilityReportService,22,6,0,0,5,3,5,1,5,1
+HousingService,com.example.housingservice.service,HouseService,31,6,0,0,7,3,7,1,7,1
+HousingService,com.example.housingservice.service,FacilityReportDetailService,21,6,0,0,6,3,4,1,4,1
+HousingService,com.example.housingservice.dto,ReportDetailsDTO,36,0,0,0,6,0,8,0,8,0
+HousingService,com.example.housingservice,HousingServiceApplication,5,3,0,0,2,1,1,1,1,1
+HousingService,com.example.housingservice.dao,FacilityReportDetailDAO,122,3,2,0,35,1,5,1,4,1
+HousingService,com.example.housingservice.dao,FacilityReportDAO,116,3,0,0,32,1,6,1,6,1
+HousingService,com.example.housingservice.dao,HouseDAO,132,64,2,0,33,19,5,4,4,4
+HousingService,com.example.housingservice.controller,HRController,60,45,0,0,15,13,2,7,2,7
+HousingService,com.example.housingservice.controller,EmployeeController,182,12,4,0,41,5,11,1,9,1
+HousingService,com.example.housingservice.controller,HouseController,8,6,0,0,2,3,2,1,2,1
+HousingService,com.example.housingservice.controller,FacilityReportController,8,6,0,0,2,3,2,1,2,1

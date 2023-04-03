@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FacilityReportDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HousingService</a> &gt; <a href="index.source.html" class="el_package">com.example.housingservice.dao</a> &gt; <span class="el_source">FacilityReportDAO.java</span></div><h1>FacilityReportDAO.java</h1><pre class="source lang-java linenums">package com.example.housingservice.dao;
+
+import com.example.housingservice.domain.*;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
+
+@Repository
+<span class="fc" id="L16">public class FacilityReportDAO {</span>
+
+    @Autowired
+    SessionFactory sessionFactory;
+
+    public List&lt;FacilityReportDetail&gt; getAllComments() {
+<span class="nc" id="L22">        Session session = sessionFactory.getCurrentSession();</span>
+<span class="nc" id="L23">        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();</span>
+<span class="nc" id="L24">        CriteriaQuery&lt;FacilityReportDetail&gt; criteriaQuery = criteriaBuilder.createQuery(FacilityReportDetail.class);</span>
+<span class="nc" id="L25">        Root&lt;FacilityReportDetail&gt; root = criteriaQuery.from(FacilityReportDetail.class);</span>
+<span class="nc" id="L26">        criteriaQuery.select(root);</span>
+
+<span class="nc" id="L28">        return session.createQuery(criteriaQuery).getResultList();</span>
+    }
+
+    public List&lt;FacilityReport&gt; getAllReports() {
+
+<span class="nc" id="L33">        Session session = sessionFactory.getCurrentSession();</span>
+<span class="nc" id="L34">        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();</span>
+<span class="nc" id="L35">        CriteriaQuery&lt;FacilityReport&gt; criteriaQuery = criteriaBuilder.createQuery(FacilityReport.class);</span>
+<span class="nc" id="L36">        Root&lt;FacilityReport&gt; root = criteriaQuery.from(FacilityReport.class);</span>
+<span class="nc" id="L37">        criteriaQuery.select(root);</span>
+
+<span class="nc" id="L39">        return session.createQuery(criteriaQuery).getResultList();</span>
+
+
+    }
+
+
+
+    public void createReportByEmp(FacilityReport facilityReport) {
+<span class="nc" id="L47">        Session session = sessionFactory.getCurrentSession();</span>
+        try{
+
+<span class="nc" id="L50">            session.saveOrUpdate(facilityReport);</span>
+        }
+<span class="nc" id="L52">        catch(Exception e){</span>
+<span class="nc" id="L53">            e.printStackTrace();</span>
+<span class="nc" id="L54">        }</span>
+<span class="nc" id="L55">    }</span>
+
+    public List&lt;FacilityReport&gt; getAllReportsByHr() {
+
+<span class="nc" id="L59">        Session session = sessionFactory.getCurrentSession();</span>
+<span class="nc" id="L60">        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();</span>
+<span class="nc" id="L61">        CriteriaQuery&lt;FacilityReport&gt; criteriaQuery = criteriaBuilder.createQuery(FacilityReport.class);</span>
+<span class="nc" id="L62">        Root&lt;FacilityReport&gt; root = criteriaQuery.from(FacilityReport.class);</span>
+<span class="nc" id="L63">        criteriaQuery.select(root)</span>
+<span class="nc" id="L64">                .orderBy(criteriaBuilder.desc(root.get(&quot;createDate&quot;)));</span>
+
+<span class="nc" id="L66">        return session.createQuery(criteriaQuery).getResultList();</span>
+
+    }
+
+    public List&lt;FacilityReport&gt; getReportByEmpId(String empId) {
+<span class="nc" id="L71">        Session session = sessionFactory.getCurrentSession();</span>
+<span class="nc" id="L72">        List&lt;FacilityReport&gt; report = null;</span>
+
+<span class="nc" id="L74">        Query query = session.createQuery(&quot;from FacilityReport f where f.empId = :empId&quot;);</span>
+<span class="nc" id="L75">        query.setParameter(&quot;empId&quot;, empId);</span>
+<span class="nc" id="L76">        report = query.getResultList();</span>
+
+<span class="nc" id="L78">        return report;</span>
+    }
+
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+<span class="nc" id="L83">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

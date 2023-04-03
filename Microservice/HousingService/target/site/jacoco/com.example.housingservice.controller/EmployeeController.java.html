@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmployeeController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HousingService</a> &gt; <a href="index.source.html" class="el_package">com.example.housingservice.controller</a> &gt; <span class="el_source">EmployeeController.java</span></div><h1>EmployeeController.java</h1><pre class="source lang-java linenums">package com.example.housingservice.controller;
+
+import com.example.housingservice.domain.*;
+import com.example.housingservice.domain.request.AddComment;
+import com.example.housingservice.domain.request.CreateReport;
+import com.example.housingservice.domain.request.UpdateComment;
+import com.example.housingservice.domain.response.ReportResponse;
+import com.example.housingservice.domain.response.ReportResponseList;
+import com.example.housingservice.dto.ReportDetailsDTO;
+import com.example.housingservice.service.FacilityReportDetailService;
+import com.example.housingservice.service.FacilityReportService;
+import com.example.housingservice.service.HouseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+
+@RestController
+@RequestMapping(&quot;employee&quot;)
+public class EmployeeController {
+    private FacilityReportDetailService facilityReportDetailService;
+    private FacilityReportService facilityReportService;
+    private HouseService houseService;
+    @Autowired
+<span class="fc" id="L28">    public EmployeeController(FacilityReportDetailService facilityReportDetailService, FacilityReportService facilityReport, HouseService houseService) {</span>
+<span class="fc" id="L29">        this.facilityReportDetailService = facilityReportDetailService;</span>
+<span class="fc" id="L30">        this.facilityReportService = facilityReport;</span>
+<span class="fc" id="L31">        this.houseService = houseService;</span>
+<span class="fc" id="L32">    }</span>
+
+    @GetMapping(&quot;/comments&quot;)
+<span class="nc" id="L35">    public List&lt;FacilityReportDetail&gt; getAllComments() {return facilityReportService.getAllComments();}</span>
+
+//    @GetMapping(&quot;/reports&quot;)
+//    public List&lt;FacilityReport&gt; getAllReports() {return facilityReportService.getAllReports();}
+    @GetMapping(&quot;/reports&quot;)
+<span class="nc" id="L40">    public UserFacilityReportsResponse getAllReports() {return new UserFacilityReportsResponse(facilityReportService.getAllReports());}</span>
+    @GetMapping(&quot;/address&quot;)
+<span class="nc" id="L42">    public List&lt;House&gt; getAddress() {return houseService.getAddress();}</span>
+
+//    @GetMapping(&quot;/landloard/name&quot;)
+//    public List&lt;Landlord&gt; getName() {
+//        return houseService.getName();
+//    }
+
+    @PostMapping(&quot;/update/comment&quot;)
+    public UpdateComment updateCommentsByEmpId(@RequestBody UpdateComment updateComment) {
+<span class="nc" id="L51">        facilityReportDetailService.updateCommentsByEmpId(updateComment.getId(), updateComment.getComment());</span>
+
+<span class="nc" id="L53">        return updateComment;</span>
+    }
+
+    @PostMapping(&quot;/create/report&quot;)
+    public String createReportByEmp(@RequestBody CreateReport createReport) {
+<span class="nc" id="L58">        FacilityReport facilityReport = new FacilityReport();</span>
+
+<span class="nc" id="L60">        facilityReport.setFacilityId(createReport.getFacilityId());</span>
+<span class="nc" id="L61">        facilityReport.setEmpId(createReport.getEmpId());</span>
+<span class="nc" id="L62">        facilityReport.setTitle(createReport.getTitle());</span>
+<span class="nc" id="L63">        facilityReport.setDescription(createReport.getDescription());</span>
+<span class="nc" id="L64">        facilityReport.setCreateDate(new Timestamp(System.currentTimeMillis()));</span>
+<span class="nc" id="L65">        facilityReport.setStatus(&quot;Open&quot;);</span>
+
+<span class="nc" id="L67">        facilityReportService.createReportByEmp(facilityReport);</span>
+
+<span class="nc" id="L69">        return &quot;Report Created!&quot;;</span>
+    }
+
+    @PostMapping(&quot;/create/comment&quot;)
+    public String addComment(@RequestBody AddComment addComment) {
+<span class="nc" id="L74">        FacilityReportDetail facilityReportDetail = new FacilityReportDetail();</span>
+
+<span class="nc" id="L76">        facilityReportDetail.setFacilityReportId(addComment.getFacilityReportId());</span>
+<span class="nc" id="L77">        facilityReportDetail.setEmpId(addComment.getEmpId());</span>
+<span class="nc" id="L78">        facilityReportDetail.setComment(addComment.getComment());</span>
+<span class="nc" id="L79">        facilityReportDetail.setCreateDate(new Timestamp(System.currentTimeMillis()));</span>
+<span class="nc" id="L80">        facilityReportDetail.setLastModDate(new Timestamp(System.currentTimeMillis()));</span>
+
+<span class="nc" id="L82">        facilityReportDetailService.addComment(facilityReportDetail);</span>
+
+<span class="nc" id="L84">        return &quot;Comment Created!&quot;;</span>
+    }
+
+    @GetMapping(&quot;/reports/employee/{empId}&quot;)
+    public List&lt;FacilityReport&gt; getReportByEmpId(@PathVariable String empId) {
+<span class="nc" id="L89">        return facilityReportService.getReportByEmpId(empId);</span>
+    }
+    @GetMapping(&quot;/comments/DTO&quot;)
+    public ReportResponseList getReportDetailsDTO(@RequestParam String employee_id) {
+        //TODO:modify parameters;
+<span class="nc" id="L94">        List&lt;FacilityReport&gt; reports = facilityReportService.getReportByEmpId(employee_id);</span>
+<span class="nc" id="L95">        List&lt;ReportResponse&gt; responses = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        for (FacilityReport report : reports) {</span>
+<span class="nc" id="L97">            List&lt;FacilityReportDetail&gt; details = facilityReportDetailService.getFacilityReportDetailsByReportId(report.getId());</span>
+<span class="nc" id="L98">            List&lt;ReportDetailsDTO&gt; dtos = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            for (FacilityReportDetail detail : details) {</span>
+                //TODO:change author to real id;
+<span class="nc" id="L101">                ReportDetailsDTO dto = new ReportDetailsDTO(detail.getComment(), detail.getEmpId(), detail.getLastModDate());</span>
+<span class="nc" id="L102">                dtos.add(dto);</span>
+<span class="nc" id="L103">            }</span>
+            //TODO:CHANGE AUTHOR TO REAL ID;
+<span class="nc" id="L105">            ReportResponse reportResponse = new ReportResponse(report.getTitle()</span>
+<span class="nc" id="L106">                    , report.getDescription()</span>
+<span class="nc" id="L107">                    , report.getEmpId()</span>
+<span class="nc" id="L108">                    , report.getCreateDate()</span>
+<span class="nc" id="L109">                    , report.getStatus()</span>
+                    , dtos);
+<span class="nc" id="L111">            responses.add(reportResponse);</span>
+<span class="nc" id="L112">        }</span>
+<span class="nc" id="L113">        return new ReportResponseList(responses);</span>
+    }
+    @GetMapping(&quot;/get/houseId&quot;)
+    public Integer getNonFullHouseId() {
+<span class="nc" id="L117">        return houseService.getNonFullHouseId();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

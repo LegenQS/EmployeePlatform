@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HRController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HousingService</a> &gt; <a href="index.source.html" class="el_package">com.example.housingservice.controller</a> &gt; <span class="el_source">HRController.java</span></div><h1>HRController.java</h1><pre class="source lang-java linenums">package com.example.housingservice.controller;
+
+import com.example.housingservice.domain.*;
+import com.example.housingservice.domain.request.AddComment;
+import com.example.housingservice.domain.request.AddHouse;
+import com.example.housingservice.domain.request.UpdateComment;
+import com.example.housingservice.service.FacilityReportDetailService;
+import com.example.housingservice.service.FacilityReportService;
+import com.example.housingservice.service.HouseService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.Tuple;
+import java.sql.Timestamp;
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;hr&quot;)
+public class HRController {
+    private HouseService houseService;
+    private FacilityReportService facilityReportService;
+    private FacilityReportDetailService facilityReportDetailService;
+    @Autowired
+<span class="fc" id="L25">    public HRController(HouseService houseService, FacilityReportService facilityReportService, FacilityReportDetailService facilityReportDetailService) {</span>
+<span class="fc" id="L26">        this.houseService = houseService;</span>
+<span class="fc" id="L27">        this.facilityReportService = facilityReportService;</span>
+<span class="fc" id="L28">        this.facilityReportDetailService = facilityReportDetailService;</span>
+<span class="fc" id="L29">    }</span>
+
+    @GetMapping(&quot;/houses&quot;)
+//    @ApiOperation(value = &quot;Find all houses&quot;, response = House.class)
+<span class="fc" id="L33">    public List&lt;House&gt; getAllHouses() {return houseService.getAllHouses();}</span>
+
+    @PostMapping(&quot;/add/house&quot;)
+    public String addHouse(@RequestBody AddHouse addHouse) {
+<span class="nc" id="L37">        House house = new House();</span>
+
+<span class="nc" id="L39">        house.setLandlordId(addHouse.getLandlordId());</span>
+<span class="nc" id="L40">        house.setAddress(addHouse.getAddress());</span>
+<span class="nc" id="L41">        house.setMaxOcc(addHouse.getMaxOcc());</span>
+<span class="nc" id="L42">        house.setCurOcc(addHouse.getCurOcc());</span>
+<span class="nc" id="L43">        houseService.addHouse(house);</span>
+
+<span class="nc" id="L45">        return &quot;House Added!&quot;;</span>
+    }
+
+    @PostMapping(&quot;/delete/house/{id}&quot;)
+    public String deleteHouse(@PathVariable Integer id) {
+<span class="fc" id="L50">        houseService.deleteHouse(id);</span>
+
+<span class="fc" id="L52">        return &quot;House Deleted!&quot;;</span>
+    }
+
+    @PostMapping(&quot;view/house/{id}&quot;)
+    public HouseFacility getHouseDetailById(@PathVariable Integer id) {
+<span class="fc" id="L57">        return houseService.getHouseDetailById(id);</span>
+    }
+
+    @GetMapping(&quot;view/reports&quot;)
+<span class="fc" id="L61">    public List&lt;FacilityReport&gt; getAllReportsByHr() {return facilityReportService.getAllReportsByHr();}</span>
+
+    @GetMapping(&quot;view/reports/{id}&quot;)
+<span class="fc" id="L64">    public List&lt;FacilityReportDetail&gt; getReportDetailById(@PathVariable Integer id) {return facilityReportDetailService.getReportDetailById(id);}</span>
+
+    @PostMapping(&quot;/update/comment&quot;)
+    public UpdateComment updateCommentsByEmpId(@RequestBody UpdateComment updateComment) {
+<span class="fc" id="L68">        facilityReportDetailService.updateCommentsByEmpId(updateComment.getId(), updateComment.getComment());</span>
+
+<span class="fc" id="L70">        return updateComment;</span>
+    }
+
+    @PostMapping(&quot;/create/comment&quot;)
+    public String addComment(@RequestBody AddComment addComment) {
+<span class="nc" id="L75">        FacilityReportDetail facilityReportDetail = new FacilityReportDetail();</span>
+
+<span class="nc" id="L77">        facilityReportDetail.setFacilityReportId(addComment.getFacilityReportId());</span>
+<span class="nc" id="L78">        facilityReportDetail.setEmpId(addComment.getEmpId());</span>
+<span class="nc" id="L79">        facilityReportDetail.setComment(addComment.getComment());</span>
+<span class="nc" id="L80">        facilityReportDetail.setCreateDate(new Timestamp(System.currentTimeMillis()));</span>
+<span class="nc" id="L81">        facilityReportDetail.setLastModDate(new Timestamp(System.currentTimeMillis()));</span>
+
+<span class="nc" id="L83">        facilityReportDetailService.addComment(facilityReportDetail);</span>
+
+<span class="nc" id="L85">        return &quot;Comment Created!&quot;;</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

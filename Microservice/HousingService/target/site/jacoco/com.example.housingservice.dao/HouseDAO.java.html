@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HouseDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HousingService</a> &gt; <a href="index.source.html" class="el_package">com.example.housingservice.dao</a> &gt; <span class="el_source">HouseDAO.java</span></div><h1>HouseDAO.java</h1><pre class="source lang-java linenums">package com.example.housingservice.dao;
+
+import com.example.housingservice.domain.*;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import javax.persistence.Tuple;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
+import java.util.List;
+
+@Repository
+<span class="fc" id="L18">public class HouseDAO {</span>
+
+    @Autowired
+    SessionFactory sessionFactory;
+
+    public List&lt;House&gt; getAddress() {
+<span class="fc" id="L24">        Session session = sessionFactory.getCurrentSession();</span>
+<span class="fc" id="L25">        List&lt;House&gt; addressList = null;</span>
+
+<span class="fc" id="L27">        Query query = session.createQuery(&quot;select  h.address from House h&quot;);</span>
+<span class="fc" id="L28">        addressList = query.getResultList();</span>
+
+<span class="fc" id="L30">        return addressList;</span>
+    }
+
+    public List&lt;Landlord&gt; getName() {
+<span class="fc" id="L34">        Session session = sessionFactory.getCurrentSession();</span>
+<span class="fc" id="L35">        List name = null;</span>
+<span class="fc" id="L36">        Query query = session.createQuery(&quot;select l.firstname, l.cellphone from Landlord l&quot;);</span>
+<span class="fc" id="L37">        name = query.getResultList();</span>
+<span class="fc" id="L38">        return name;</span>
+    }
+
+    public List&lt;House&gt; getAllHouses() {
+
+<span class="nc" id="L43">        Session session = sessionFactory.getCurrentSession();</span>
+<span class="nc" id="L44">        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();</span>
+<span class="nc" id="L45">        CriteriaQuery&lt;House&gt; criteriaQuery = criteriaBuilder.createQuery(House.class);</span>
+<span class="nc" id="L46">        Root&lt;House&gt; root = criteriaQuery.from(House.class);</span>
+<span class="nc" id="L47">        criteriaQuery.select(root);</span>
+
+
+<span class="nc" id="L50">        return session.createQuery(criteriaQuery).getResultList();</span>
+    }
+
+    public void addHouse(House house) {
+<span class="nc" id="L54">        Session session = sessionFactory.getCurrentSession();</span>
+        try {
+<span class="nc" id="L56">            session.saveOrUpdate(house);</span>
+<span class="nc" id="L57">        }catch (Exception e){</span>
+<span class="nc" id="L58">            e.printStackTrace();</span>
+<span class="nc" id="L59">        }</span>
+<span class="nc" id="L60">    }</span>
+
+    public void deleteHouse(Integer id) {
+<span class="fc" id="L63">        Session session = sessionFactory.getCurrentSession();</span>
+<span class="fc" id="L64">        Integer result = null;</span>
+        try {
+<span class="fc" id="L66">            Query query = session.createQuery(&quot;delete from House h where h.id = :id&quot;);</span>
+<span class="fc" id="L67">            query.setParameter(&quot;id&quot;, id);</span>
+<span class="fc" id="L68">            result = query.executeUpdate();</span>
+
+<span class="fc" id="L70">            System.out.println(&quot;Row affected: &quot; + result);</span>
+
+<span class="nc" id="L72">        }catch (Exception e){</span>
+<span class="nc" id="L73">            e.printStackTrace();</span>
+<span class="fc" id="L74">        }</span>
+<span class="fc" id="L75">    }</span>
+
+    public HouseFacility getHouseDetailById(Integer id) {
+<span class="nc" id="L78">        Session session = sessionFactory.getCurrentSession();</span>
+
+<span class="nc" id="L80">        Query query = session.createQuery(&quot;from Facility f where f.houseId = :id&quot;);</span>
+<span class="nc" id="L81">        query.setParameter(&quot;id&quot;, id);</span>
+<span class="nc" id="L82">        List&lt;Facility&gt; facilities = query.getResultList();</span>
+
+<span class="nc" id="L84">        Query houseQuery = session.createQuery(&quot;from House h where h.id=:id&quot;);</span>
+<span class="nc" id="L85">        houseQuery.setParameter(&quot;id&quot;, id);</span>
+<span class="nc" id="L86">        House house = (House)houseQuery.getResultList().get(0);</span>
+<span class="nc" id="L87">        HouseFacility houseFacility = new HouseFacility(house.getId(),house.getLandlordId(),house.getAddress(),house.getMaxOcc(),house.getCurOcc(),facilities);</span>
+
+<span class="nc" id="L89">        return houseFacility;</span>
+
+
+    }
+
+//    public Integer getNonFullHouseId() {
+//        Session session = sessionFactory.getCurrentSession();
+//        Integer id = null;
+//        Query query = session.createQuery(&quot;select h.id from House h where h.curOcc &lt; h.maxOcc order by h.id asc &quot;);
+//        id = (Integer) query.getResultList().get(0);
+//
+//        return id;
+//    }
+
+    public Integer getNonFullHouseId() {
+<span class="nc" id="L104">        Session session = sessionFactory.getCurrentSession();</span>
+<span class="nc" id="L105">        Integer id = -1;</span>
+<span class="nc" id="L106">        Query query = session.createQuery(&quot;select h.id from House h where h.curOcc &lt; h.maxOcc order by rand()&quot;);</span>
+<span class="nc" id="L107">        List&lt;Integer&gt; resultList = query.getResultList();</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (!resultList.isEmpty()) {</span>
+<span class="nc" id="L109">            id = resultList.get(0);</span>
+<span class="nc" id="L110">            House house = session.get(House.class, id);</span>
+<span class="nc" id="L111">            house.setCurOcc(house.getCurOcc() + 1);</span>
+<span class="nc" id="L112">            session.update(house);</span>
+        }
+<span class="nc" id="L114">        return id;</span>
+    }
+
+
+
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
